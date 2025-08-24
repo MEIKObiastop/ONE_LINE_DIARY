@@ -259,4 +259,11 @@ def user_delete():
     db.session.commit()
     
     flash("アカウントと投稿がすべて削除されました。")
+
     return redirect(url_for('login'))
+
+#テーブル作れるかな
+if __name__ == "__main__":
+    from onediary_app import db
+    db.create_all()  # デプロイ時にテーブルを作る
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
