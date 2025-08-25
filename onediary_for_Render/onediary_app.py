@@ -22,14 +22,14 @@ migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-def tokyo_now():
-    return datetime.now(pytz.timezone('Asia/Tokyo'))
+def utc_now():
+    return datetime.utcnow()
 
 class Post(db.Model):
     __tablename__ = 'onediary_post' # テーブル名を指定
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    date_created = db.Column(db.DateTime, default=tokyo_now)
+    date_created = db.Column(db.DateTime, default=utc_now)
     
     user_id = db.Column(db.Integer, db.ForeignKey('onediary_user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
@@ -147,6 +147,7 @@ def index():
     posts_with_emoji = []
     for post in all_posts:
         emoji = analyze_emoji(post.content)
+        jst_date = post.date_created.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Tokyo'))
         posts_with_emoji.append({
             "content": post.content,
             "date": post.date_created,
@@ -219,7 +220,7 @@ def logout():
 @login_required
 def posts():
     content = request.form['diary_entry']
-    new_post = Post(content=content, date_created=tokyo_now(), user_id=current_user.id)
+    new_post = Post(content=content, date_created=utc_now(), user_id=current_user.id)
     db.session.add(new_post)
     db.session.commit()
     return redirect(url_for('index'))
@@ -274,6 +275,8 @@ if __name__ == "__main__":
     from onediary_app import db
     db.create_all()  # デプロイ時にテーブルを作る
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+
 
 
 
