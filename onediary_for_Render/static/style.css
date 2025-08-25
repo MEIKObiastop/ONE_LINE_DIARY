@@ -35,3 +35,30 @@ h2 {
 .post {
     margin-bottom: 12px; /* 投稿ごとの間隔を少し広めに */
 }
+
+/* 共通: 横並び */
+.login-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* 画面が狭いときに自動で折り返す用 */
+}
+
+/* ラベルと入力欄を横並びにする */
+.login-form .form-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* スマホ(600px以下)では縦並びに切り替え */
+@media (max-width: 600px) {
+    .login-form {
+        flex-direction: column;
+        align-items: stretch; /* 幅いっぱい */
+    }
+    .login-form button {
+        align-self: flex-start; /* ボタンを左寄せ */
+    }
+}
