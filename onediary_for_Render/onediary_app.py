@@ -13,6 +13,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'testsecret')
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import inspect
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -273,6 +274,7 @@ if __name__ == "__main__":
     from onediary_app import db
     db.create_all()  # デプロイ時にテーブルを作る
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
