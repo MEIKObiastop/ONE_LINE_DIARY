@@ -128,7 +128,8 @@ def inject_background_color():
     return dict(background_color=overall_color)
 
 with app.app_context():
-    if not db.engine.has_table("onediary_user"):
+    inspector = inspect(db.engine)
+    if "onediary_user" not in inspector.get_table_names():
         print(">>> Creating tables...")
         db.create_all()
         print(">>> Done creating tables!")
@@ -272,5 +273,6 @@ if __name__ == "__main__":
     from onediary_app import db
     db.create_all()  # デプロイ時にテーブルを作る
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
