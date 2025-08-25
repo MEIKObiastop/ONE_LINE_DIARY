@@ -150,7 +150,7 @@ def index():
         jst_date = post.date_created.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Tokyo'))
         posts_with_emoji.append({
             "content": post.content,
-            "date": post.date_created,
+            "date": jst_date,
             "emoji": emoji
         })
 
@@ -275,6 +275,7 @@ if __name__ == "__main__":
     from onediary_app import db
     db.create_all()  # デプロイ時にテーブルを作る
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
